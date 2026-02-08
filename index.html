@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Morse</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: #1a1d23;
+        color: #e2e4e8;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        padding: 1.5rem;
+      }
+
+      .dashboard {
+        max-width: 420px;
+        margin: 0 auto;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .dashboard h1 {
+        margin: 0 0 0.25rem 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #fff;
+      }
+
+      .dashboard .subtitle {
+        margin: 0 0 1rem 0;
+        font-size: 0.8125rem;
+        color: #8b909a;
+      }
+
+      .panel {
+        background: #252830;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        border: 1px solid #2d3139;
+      }
+
+      .panel__title {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #8b909a;
+        margin: 0 0 0.75rem 0;
+      }
+
+      /* Status light */
+      .status-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      #status {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #3d4149;
+        transition: background 0.1s ease, box-shadow 0.1s ease;
+      }
+
+      #status.status__on {
+        background: #22c55e;
+        box-shadow: 0 0 12px rgba(34, 197, 94, 0.6);
+      }
+
+      .status-row span {
+        font-size: 0.8125rem;
+        color: #a1a6b0;
+      }
+
+      /* Send key */
+      #knob {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #e2e4e8;
+        background: #2d3139;
+        border: 1px solid #3d4149;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+
+      #knob:hover {
+        background: #363b44;
+        border-color: #4b5059;
+      }
+
+      #knob:active {
+        background: #22c55e;
+        border-color: #22c55e;
+        color: #1a1d23;
+      }
+
+      .panel .hint {
+        font-size: 0.6875rem;
+        color: #6b7080;
+        margin-top: 0.5rem;
+      }
+
+      /* Log */
+      #code-container {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        min-height: 2.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        align-content: flex-start;
+      }
+
+      #code-container li {
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-family: ui-monospace, monospace;
+      }
+
+      #code-container li.dit {
+        background: rgba(234, 88, 12, 0.25);
+        color: #fb923c;
+      }
+
+      #code-container li.dah {
+        background: rgba(59, 130, 246, 0.25);
+        color: #60a5fa;
+      }
+
+      /* Speaker */
+      .speaker {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .speaker__icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: #2d3139;
+        border: 1px solid #3d4149;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .speaker__icon.active {
+        background: rgba(34, 197, 94, 0.2);
+        border-color: #22c55e;
+        box-shadow: 0 0 16px rgba(34, 197, 94, 0.25);
+      }
+
+      .speaker__icon svg {
+        width: 20px;
+        height: 20px;
+        fill: #6b7080;
+        transition: fill 0.15s ease;
+      }
+
+      .speaker__icon.active svg {
+        fill: #22c55e;
+      }
+
+      .speaker__label {
+        font-size: 0.8125rem;
+        color: #8b909a;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="dashboard">
+      <header>
+        <h1>Morse</h1>
+        <p class="subtitle">Learn life-saving Morse code. Hold space or press the key to send.</p>
+      </header>
+
+      <section class="panel">
+        <h2 class="panel__title">Status</h2>
+        <div class="status-row">
+          <div id="status" aria-label="Transmit off"></div>
+          <span id="status-label">Idle</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel__title">Send key</h2>
+        <button type="button" id="knob">Hold to transmit</button>
+        <p class="hint">Spacebar works too</p>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel__title">Sent</h2>
+        <ol id="code-container" aria-label="Recent signals"></ol>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel__title">Speaker</h2>
+        <div class="speaker">
+          <div class="speaker__icon" id="speaker" aria-label="Speaker">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+          </div>
+          <span class="speaker__label" id="speaker-label">Off</span>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      let value = 0;
+      const status = document.querySelector("#status");
+      const statusLabel = document.querySelector("#status-label");
+      const knob = document.querySelector("#knob");
+      const speaker = document.querySelector("#speaker");
+      const speakerLabel = document.querySelector("#speaker-label");
+
+      // Code Array
+      const codeContainer = document.querySelector("#code-container");
+
+      // Timer: only exists while spacebar is held (start on keydown, clear on keyup)
+      let pressStartTime = null;
+      let holdTimerId = null;
+
+      // Sound
+      let audioContext;
+      let oscillator;
+
+      function playTone() {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
+        }
+        oscillator = audioContext.createOscillator();
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+        oscillator.connect(audioContext.destination);
+        oscillator.start();
+      }
+
+      function stopTone() {
+        if (oscillator) {
+          oscillator.stop();
+          oscillator = null;
+        }
+      }
+
+      function addSignal(isDit) {
+        const signal = document.createElement("li");
+        signal.classList.add(isDit ? "dit" : "dah");
+        signal.textContent = isDit ? "·" : "−";
+        signal.setAttribute("aria-label", isDit ? "dit" : "dah");
+        codeContainer.prepend(signal);
+      }
+
+      function startPress() {
+        if (value === 1) return;
+        value = 1;
+        status.classList.add("status__on");
+        status.setAttribute("aria-label", "Transmitting");
+        if (statusLabel) statusLabel.textContent = "Transmitting";
+        speaker.classList.add("active");
+        speaker.setAttribute("aria-label", "Speaker on");
+        if (speakerLabel) speakerLabel.textContent = "On";
+        pressStartTime = Date.now();
+        playTone();
+        holdTimerId = setInterval(() => {
+          const elapsedMs = Date.now() - pressStartTime;
+          console.log("held:", Math.round(elapsedMs / 100) / 10, "s");
+        }, 100);
+      }
+
+      function endPress() {
+        if (value !== 1) return;
+        if (holdTimerId !== null) {
+          clearInterval(holdTimerId);
+          holdTimerId = null;
+        }
+        const durationMs = Date.now() - pressStartTime;
+        pressStartTime = null;
+        console.log("total hold:", durationMs, "ms");
+        addSignal(durationMs < 200);
+        stopTone();
+        status.classList.remove("status__on");
+        status.setAttribute("aria-label", "Transmit off");
+        if (statusLabel) statusLabel.textContent = "Idle";
+        speaker.classList.remove("active");
+        speaker.setAttribute("aria-label", "Speaker");
+        if (speakerLabel) speakerLabel.textContent = "Off";
+        value = 0;
+      }
+
+      // Spacebar
+      document.addEventListener("keydown", (event) => {
+        if (value === 1) return;
+        if (event.code !== "Space") return;
+        event.preventDefault();
+        startPress();
+      });
+
+      document.addEventListener("keyup", (event) => {
+        if (value !== 1) return;
+        if (event.code !== "Space") return;
+        event.preventDefault();
+        endPress();
+      });
+
+      // Knob button
+      knob.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        startPress();
+      });
+
+      knob.addEventListener("mouseup", () => endPress());
+      knob.addEventListener("mouseleave", () => {
+        if (value === 1) endPress();
+      });
+    </script>
+  </body>
+</html>
