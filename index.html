@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Morse Code</title>
+    <style>
+      button {
+        width: 100%;
+        height: 20px;
+        background-color: gray;
+      }
+
+      #led {
+        width: 100%;
+        height: 20px;
+        background-color: tan;
+
+        &.active {
+          background-color: green;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div id="led"></div>
+      <button></button>
+    </main>
+    <script type="module">
+      import { playBeep, stopBeep } from "/audio.js";
+      import { ledStatus } from "/led.js";
+
+      const button = document.querySelector("button");
+      const led = document.querySelector("#led");
+
+      function handleButtonPress() {
+        ledStatus("on");
+        playBeep();
+      }
+
+      function handleButtonRelease() {
+        ledStatus("off");
+        stopBeep();
+      }
+
+      button.addEventListener("mousedown", handleButtonPress);
+      button.addEventListener("mouseup", handleButtonRelease);
+    </script>
+  </body>
+</html>
