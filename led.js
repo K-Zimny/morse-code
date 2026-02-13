@@ -1,4 +1,8 @@
-// Turns LED on or off
+/**
+ * led.js
+ *
+ * Handles illumination of status light (led)
+ */
 function ledStatus(status) {
   if (status === "on") {
     led.classList.add("active");
