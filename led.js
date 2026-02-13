@@ -1,7 +1,7 @@
 /**
  * led.js
  *
- * Handles illumination of status light (led)
+ * Handles illumination of status light (led).
  */
 function ledStatus(status) {
   if (status === "on") {

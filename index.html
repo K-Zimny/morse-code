@@ -44,8 +44,20 @@
         stopBeep();
       }
 
-      button.addEventListener("mousedown", handleButtonPress);
-      button.addEventListener("mouseup", handleButtonRelease);
+      (function setupListeners() {
+        button.addEventListener("mousedown", handleButtonPress);
+        button.addEventListener("mouseup", handleButtonRelease);
+        window.addEventListener("keydown", (e) => {
+          if (e.code == "Space") {
+            handleButtonPress();
+          }
+        });
+        window.addEventListener("keyup", (e) => {
+          if (e.code == "Space") {
+            handleButtonRelease();
+          }
+        });
+      })();
     </script>
   </body>
 </html>
