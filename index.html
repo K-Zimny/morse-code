@@ -33,13 +33,15 @@
     <script type="module">
       import { playBeep, stopBeep } from "/audio.js";
       import { ledStatus } from "/led.js";
+      import {
+        startSignalTimer,
+        endSignalTimer,
+        determineSignal,
+      } from "/signal.js";
 
       const button = document.querySelector("button");
       const led = document.querySelector("#led");
       const log = document.querySelector("#log");
-
-      let signalTimer = null;
-      let signalTime = 0;
 
       function handleButtonPress() {
         ledStatus("on");
@@ -69,44 +71,20 @@
         log.prepend(el);
       }
 
-      function startSignalTimer() {
-        signalTimer = setInterval(() => {
-          signalTime += 0.1;
-        }, 100);
-      }
-
-      function endSignalTimer() {
-        console.log(signalTimer);
-        clearInterval(signalTimer);
-        // signalTimer = null;
-      }
-
-      function determineSignal() {
-        console.log("signalTime", signalTime);
-        console.log("signalTimer", signalTimer);
-        let signal = null;
-        if (signalTime >= 0.3) {
-          signal = "long";
-          signalTime = 0; // reset timer
-        } else {
-          signal = "short";
-          signalTime = 0; // reset timer
-        }
-
-        return signal;
-      }
-
       (function setupListeners() {
+        let isPressed = false;
         button.addEventListener("mousedown", handleButtonPress);
         button.addEventListener("mouseup", handleButtonRelease);
         window.addEventListener("keydown", (e) => {
           e.preventDefault();
-          if (e.code == "Space") {
+          if (e.code == "Space" && isPressed === false) {
+            isPressed = true;
             handleButtonPress();
           }
         });
         window.addEventListener("keyup", (e) => {
           if (e.code == "Space") {
+            isPressed = false;
             handleButtonRelease();
           }
         });
