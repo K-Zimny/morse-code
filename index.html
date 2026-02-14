@@ -26,69 +26,29 @@
     <main>
       <div id="led"></div>
       <button></button>
-      <ul id="log">
-        <li>Log</li>
-      </ul>
+      <ul id="log"></ul>
     </main>
     <script type="module">
       import { playBeep, stopBeep } from "/audio.js";
       import { ledStatus } from "/led.js";
-      import {
-        startSignalTimer,
-        endSignalTimer,
-        determineSignal,
-      } from "/signal.js";
-
-      const button = document.querySelector("button");
-      const led = document.querySelector("#led");
-      const log = document.querySelector("#log");
+      import { signalTimer } from "/signal.js";
+      import { writeToLog } from "/log.js";
+      import { setupListeners } from "/eventlisteners.js";
 
       function handleButtonPress() {
         ledStatus("on");
         playBeep();
-        startSignalTimer();
+        signalTimer.start();
       }
 
       function handleButtonRelease() {
         ledStatus("off");
         stopBeep();
-        endSignalTimer();
-        writeToLog(determineSignal());
+        signalTimer.end();
+        writeToLog(signalTimer.process());
       }
 
-      function writeToLog(signal) {
-        const el = document.createElement("li");
-
-        if (signal === "short") {
-          console.log("short");
-          return;
-        }
-        if (signal === "long") {
-          console.log("long");
-          return;
-        }
-
-        log.prepend(el);
-      }
-
-      (function setupListeners() {
-        let isPressed = false;
-        button.addEventListener("mousedown", handleButtonPress);
-        button.addEventListener("mouseup", handleButtonRelease);
-        window.addEventListener("keydown", (e) => {
-          e.preventDefault();
-          if (e.code == "Space" && isPressed === false) {
-            isPressed = true;
-            handleButtonPress();
-          }
-        });
-        window.addEventListener("keyup", (e) => {
-          if (e.code == "Space") {
-            isPressed = false;
-            handleButtonRelease();
-          }
-        });
-      })();
+      setupListeners(handleButtonPress, handleButtonRelease);
     </script>
   </body>
 </html>

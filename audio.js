@@ -1,5 +1,5 @@
 /**
- * Audio.js
+ * audio.js
  *
  * Morse Code audio generation.
  * Creates oscillator (tone).
