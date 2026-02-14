@@ -26,6 +26,9 @@
     <main>
       <div id="led"></div>
       <button></button>
+      <ul id="log">
+        <li>Log</li>
+      </ul>
     </main>
     <script type="module">
       import { playBeep, stopBeep } from "/audio.js";
@@ -33,21 +36,71 @@
 
       const button = document.querySelector("button");
       const led = document.querySelector("#led");
+      const log = document.querySelector("#log");
+
+      let signalTimer = null;
+      let signalTime = 0;
 
       function handleButtonPress() {
         ledStatus("on");
         playBeep();
+        startSignalTimer();
       }
 
       function handleButtonRelease() {
         ledStatus("off");
         stopBeep();
+        endSignalTimer();
+        writeToLog(determineSignal());
+      }
+
+      function writeToLog(signal) {
+        const el = document.createElement("li");
+
+        if (signal === "short") {
+          console.log("short");
+          return;
+        }
+        if (signal === "long") {
+          console.log("long");
+          return;
+        }
+
+        log.prepend(el);
+      }
+
+      function startSignalTimer() {
+        signalTimer = setInterval(() => {
+          signalTime += 0.1;
+        }, 100);
+      }
+
+      function endSignalTimer() {
+        console.log(signalTimer);
+        clearInterval(signalTimer);
+        // signalTimer = null;
+      }
+
+      function determineSignal() {
+        console.log("signalTime", signalTime);
+        console.log("signalTimer", signalTimer);
+        let signal = null;
+        if (signalTime >= 0.3) {
+          signal = "long";
+          signalTime = 0; // reset timer
+        } else {
+          signal = "short";
+          signalTime = 0; // reset timer
+        }
+
+        return signal;
       }
 
       (function setupListeners() {
         button.addEventListener("mousedown", handleButtonPress);
         button.addEventListener("mouseup", handleButtonRelease);
         window.addEventListener("keydown", (e) => {
+          e.preventDefault();
           if (e.code == "Space") {
             handleButtonPress();
           }
