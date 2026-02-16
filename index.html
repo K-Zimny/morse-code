@@ -5,28 +5,157 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Morse Code</title>
     <style>
+      body {
+        overflow-x: hidden;
+      }
+
+      #button-container {
+        position: sticky;
+        bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        margin: 3rem;
+      }
       button {
-        width: 100%;
-        height: 20px;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin: auto;
         background-color: gray;
       }
 
       #led {
-        width: 100%;
-        height: 20px;
-        background-color: tan;
+        width: 80px;
+        height: 80px;
+        margin-inline: auto;
+        margin-block: 1rem;
+        background-color: #e3e3e3;
 
         &.active {
           background-color: green;
+        }
+      }
+
+      #log {
+        /* position: sticky;
+        top: 16px; */
+        position: relative;
+        padding: 0;
+        height: 80px;
+        li {
+          position: absolute;
+          display: inline-block;
+          animation: signal 4000ms linear forwards;
+        }
+        & .short {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: rgb(255, 153, 0);
+        }
+        & .long {
+          width: 120px;
+          height: 40px;
+          background-color: rgb(0, 119, 255);
+          border-radius: 25px;
+        }
+      }
+
+      .answer-container {
+        display: flex;
+        justify-content: center;
+        gap: 5rem;
+      }
+      .answer {
+        /* position: relative; */
+        padding: 0;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        li {
+          /* position: absolute; */
+          display: inline-block;
+          /* animation: signal 10000ms linear forwards; */
+        }
+        & .short {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: rgb(255, 153, 0);
+        }
+        & .long {
+          width: 120px;
+          height: 40px;
+          background-color: rgb(0, 119, 255);
+          border-radius: 25px;
+        }
+      }
+
+      @keyframes signal {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(2000px);
         }
       }
     </style>
   </head>
   <body>
     <main>
-      <div id="led"></div>
-      <button></button>
-      <ul id="log"></ul>
+      <div class="answer-container">
+        <div class="answer-block">
+          <ul class="answer">
+            <li class="long"></li>
+            <li class="long"></li>
+          </ul>
+          <ul class="answer">
+            <li class="long"></li>
+            <li class="long"></li>
+            <li class="long"></li>
+          </ul>
+          <ul class="answer">
+            <li class="short"></li>
+            <li class="long"></li>
+            <li class="short"></li>
+          </ul>
+          <ul class="answer">
+            <li class="short"></li>
+            <li class="short"></li>
+            <li class="short"></li>
+          </ul>
+          <ul class="answer">
+            <li class="short"></li>
+          </ul>
+        </div>
+        <div class="answer-block">
+          <ul class="answer">
+            <li class="long"></li>
+            <li class="short"></li>
+            <li class="long"></li>
+            <li class="short"></li>
+          </ul>
+          <ul class="answer">
+            <li class="long"></li>
+            <li class="long"></li>
+            <li class="long"></li>
+          </ul>
+          <ul class="answer">
+            <li class="long"></li>
+            <li class="short"></li>
+            <li class="short"></li>
+          </ul>
+          <ul class="answer">
+            <li class="short"></li>
+          </ul>
+        </div>
+      </div>
+      <div id="button-container">
+        <ul id="log"></ul>
+        <div id="led"></div>
+        <button></button>
+      </div>
     </main>
     <script type="module">
       import { playBeep, stopBeep } from "/audio.js";
