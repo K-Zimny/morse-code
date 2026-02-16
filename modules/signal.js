@@ -3,6 +3,7 @@
  *
  * Processes signal to determine if a 'short' or a 'long' press.
  */
+
 const signalTimer = {
   LONG_THRESHOLD: 300,
   startTime: undefined,

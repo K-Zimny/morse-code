@@ -8,6 +8,7 @@ const button = document.querySelector("button");
 
 function setupListeners(handleButtonPress, handleButtonRelease) {
   let isPressed = false;
+
   button.addEventListener("mousedown", handleButtonPress);
   button.addEventListener("mouseup", handleButtonRelease);
   window.addEventListener("keydown", (e) => {

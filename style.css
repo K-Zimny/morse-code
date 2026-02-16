@@ -1,0 +1,105 @@
+/* ===== Base ===== */
+body {
+    overflow-x: hidden;
+}
+
+/* ===== Button ===== */
+#button-container {
+    position: sticky;
+    bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    margin: 3rem;
+}
+
+button {
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    margin: auto;
+    background-color: gray;
+}
+
+/* ===== led ===== */
+#led {
+    width: 80px;
+    height: 80px;
+    margin-inline: auto;
+    margin-block: 1rem;
+    background-color: #e3e3e3;
+
+    &.active {
+        background-color: green;
+    }
+}
+
+/* ===== Log ===== */
+#log {
+    position: relative;
+    padding: 0;
+    height: 80px;
+
+    li {
+        position: absolute;
+        display: inline-block;
+        animation: signal 4000ms linear forwards;
+    }
+}
+
+/* ===== Answer ===== */
+.answer-container {
+    display: flex;
+    justify-content: center;
+    gap: 5rem;
+}
+
+.answer {
+    padding: 0;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+
+    li {
+        display: inline-block;
+    }
+}
+
+/* ===== Signal ===== */
+#log,
+.answer {
+    & .short {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: rgb(255, 153, 0);
+    }
+
+    & .long {
+        width: 100px;
+        height: 30px;
+        background-color: rgb(0, 119, 255);
+        border-radius: 25px;
+    }
+}
+
+/* ===== Animations ===== */
+@keyframes signal {
+    0% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(2000px);
+        opacity: 0;
+    }
+}

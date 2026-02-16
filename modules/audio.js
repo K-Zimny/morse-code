@@ -25,21 +25,20 @@ audioGain.connect(audioCtx.destination);
 
 oscillator.start();
 
-// Sets gain full, tone is audible
-async function playBeep() {
-  if (audioCtx.state !== "running") await audioCtx.resume();
-  const t = audioCtx.currentTime;
-  audioGain.gain.cancelScheduledValues(t);
-  audioGain.gain.setValueAtTime(audioGain.gain.value, t);
-  audioGain.gain.linearRampToValueAtTime(1, t + RAMP_VALUE);
-}
+const audio = {
+  async on() {
+    if (audioCtx.state !== "running") await audioCtx.resume();
+    const t = audioCtx.currentTime;
+    audioGain.gain.cancelScheduledValues(t);
+    audioGain.gain.setValueAtTime(audioGain.gain.value, t);
+    audioGain.gain.linearRampToValueAtTime(1, t + RAMP_VALUE);
+  },
+  off() {
+    const t = audioCtx.currentTime;
+    audioGain.gain.cancelScheduledValues(t);
+    audioGain.gain.setValueAtTime(audioGain.gain.value, t);
+    audioGain.gain.linearRampToValueAtTime(0, t + RAMP_VALUE);
+  },
+};
 
-// Sets gain zero, tone is not audible
-function stopBeep() {
-  const t = audioCtx.currentTime;
-  audioGain.gain.cancelScheduledValues(t);
-  audioGain.gain.setValueAtTime(audioGain.gain.value, t);
-  audioGain.gain.linearRampToValueAtTime(0, t + RAMP_VALUE);
-}
-
-export { playBeep, stopBeep };
+export { audio };
