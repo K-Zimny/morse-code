@@ -6,11 +6,11 @@
  * Defines functions that run on button press and release.
  */
 
-import { audio } from "/modules/audio.js";
-import { ledStatus } from "/modules/led.js";
-import { signalTimer } from "/modules/signal.js";
-import { writeToLog } from "/modules/log.js";
-import { setupListeners } from "/modules/eventlisteners.js";
+import { audio } from "./modules/audio.js";
+import { ledStatus } from "./modules/led.js";
+import { signalTimer } from "./modules/signal.js";
+import { writeToLog } from "./modules/log.js";
+import { setupListeners } from "./modules/eventlisteners.js";
 
 function handleButtonPress() {
   ledStatus.on();
