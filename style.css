@@ -1,11 +1,11 @@
-/* ===== Base ===== */
+/* ===== base ===== */
 html {
     --black: #221F20;
     --white: #ffffff;
     --gray: #525252;
     --background: #f0ebdf;
     --primary: #436e43;
-    --secondary: #f0c103;
+    --secondary: #d0a700;
     --alert: #e85151;
 
     font-family: monospace;
@@ -31,7 +31,7 @@ i {
     margin-bottom: 3rem;
 }
 
-/* ===== Button ===== */
+/* ===== button ===== */
 #button-container {
     display: flex;
     flex-direction: column;
@@ -60,7 +60,7 @@ button {
     }
 }
 
-/* ===== Log ===== */
+/* ===== log ===== */
 #log {
     position: relative;
     padding: 0;
@@ -91,7 +91,7 @@ button {
     }
 }
 
-/* ===== Signal ===== */
+/* ===== signal ===== */
 #log,
 #sos {
     & .short {
