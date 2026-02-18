@@ -5,7 +5,7 @@
  */
 
 const signalTimer = {
-  LONG_THRESHOLD: 300,
+  LONG_THRESHOLD: 200,
   startTime: undefined,
   endTime: undefined,
   start() {
